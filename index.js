@@ -47,6 +47,48 @@ app.get('/info', (req, res) => {
     res.send(`Phonebook has info for ${persons.length} people <br /><br />${date}`);
 });
 
+const genereateId = () => {
+    return Math.floor(Math.random() * 10000);
+};
+
+app.post('/api/persons', (req, res) => {
+    const body = req.body;
+
+    if (!body.name) {
+        return res.status(400).json({
+            error: 'name missing'
+        });
+    }
+
+    if (!body.number) {
+        return res.status(400).json({
+            error: 'number missing'
+        });
+    }
+
+    if (persons.map(person => person.name).includes(body.name)) {
+        return res.status(400).json({
+            error: 'name must be unique'
+        });
+    }
+
+    let id = genereateId();
+
+    while (persons.map(person => person.id).includes(id)) {
+        id = genereateId();
+    }
+
+    const person = {
+        id: genereateId(),
+        name: body.name,
+        number: body.number
+    };
+
+    persons = persons.concat(person);
+
+    res.json(person);
+});
+
 app.delete('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id);
     persons = persons.filter(person => person.id !== id);
