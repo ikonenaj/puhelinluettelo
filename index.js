@@ -1,6 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
+const Person = require('./models/person');
 
 const app = express();
 app.use(cors());
@@ -39,8 +41,10 @@ let persons = [
     }
   ];
 
-app.get('/api/persons', (req, res) => {
-    res.json(persons);
+app.get('/api/persons', (request, response) => {
+    Person.find({}).then(result => {
+        response.json(result);
+    });
 });
 
 app.get('/api/persons/:id', (req, res) => {
@@ -84,13 +88,22 @@ app.post('/api/persons', (req, res) => {
         });
     }
 
-    let id = generateId();
+    /*let id = generateId();
 
     while (persons.map(person => person.id).includes(id)) {
         id = generateId();
-    }
+    }*/
 
-    const person = {
+    const person = new Person({
+        name: body.name,
+        number: body.number
+    });
+
+    person.save().then(savedPerson => {
+        res.json(savedPerson);
+    });
+
+    /*const person = {
         id: generateId(),
         name: body.name,
         number: body.number
@@ -98,7 +111,7 @@ app.post('/api/persons', (req, res) => {
 
     persons = persons.concat(person);
 
-    res.json(person);
+    res.json(person);*/
 });
 
 app.delete('/api/persons/:id', (req, res) => {
@@ -108,7 +121,7 @@ app.delete('/api/persons/:id', (req, res) => {
     res.status(204).end();
 });
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
