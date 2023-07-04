@@ -41,21 +41,16 @@ let persons = [
     }
   ];
 
-app.get('/api/persons', (request, response) => {
+app.get('/api/persons', (req, res) => {
     Person.find({}).then(result => {
-        response.json(result);
+        res.json(result);
     });
 });
 
 app.get('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id);
-    const person = persons.find(person => person.id === id);
-
-    if (person) {
-        res.json(person)
-    } else {
-        res.status(400).end()
-    }
+    Person.findById(req.params.id).then(result => {
+        res.json(result);
+    });
 });
 
 app.get('/info', (req, res) => {
