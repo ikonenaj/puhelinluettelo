@@ -59,7 +59,7 @@ app.get('/info', (req, res) => {
     res.send(`Phonebook has info for ${persons.length} people <br /><br />${date}`);
 });
 
-const genereateId = () => {
+const generateId = () => {
     return Math.floor(Math.random() * 10000);
 };
 
@@ -84,14 +84,14 @@ app.post('/api/persons', (req, res) => {
         });
     }
 
-    let id = genereateId();
+    let id = generateId();
 
     while (persons.map(person => person.id).includes(id)) {
-        id = genereateId();
+        id = generateId();
     }
 
     const person = {
-        id: genereateId(),
+        id: generateId(),
         name: body.name,
         number: body.number
     };
