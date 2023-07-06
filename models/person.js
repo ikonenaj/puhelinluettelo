@@ -17,8 +17,22 @@ mongoose.connect(url)
   });
 
 const personSchema = new mongoose.Schema({
-  name: String,
-  number: String
+  name: {
+    type: String,
+    minLength: 3,
+    required: true
+  },
+  number: {
+    type: String,
+    minLength: 8,
+    validate: {
+      validator: function (n) {
+        return new RegExp("^[0-9]{2,3}[-][0-9]{1,}$").test(n);
+      },
+      message: 'Number must start with two or three numbers followed by a line and be at least eight characters long'
+    },
+    required: true
+  }
 });
 
 personSchema.set('toJSON', {
