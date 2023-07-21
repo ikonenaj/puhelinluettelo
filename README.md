@@ -1,3 +1,3 @@
-Backend for round 4 of Fullstack Open course
+Backend for round 3 of Fullstack Open course
 
 https://fullstack-puhelinluettelo.fly.dev/
